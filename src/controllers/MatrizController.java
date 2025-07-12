@@ -1,5 +1,5 @@
 
-package Controllers;
+package controllers;
 
 /**
  *
