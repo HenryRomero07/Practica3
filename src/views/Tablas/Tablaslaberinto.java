@@ -4,10 +4,13 @@
  */
 package views.Tablas;
 
+
+
 /**
  *
  * @author Usuario
  */
 public class Tablaslaberinto {
+  
     
 }
