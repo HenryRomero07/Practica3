@@ -136,11 +136,7 @@ private String[] buscarDatosCasa(String nombreCasa, String[][] todasCasas) {
         }
     }
     return new String[]{"", "", "", ""}; 
-}
-    
-    
-    
-    
+} 
   
     
 }

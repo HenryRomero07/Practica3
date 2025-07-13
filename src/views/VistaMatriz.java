@@ -1,5 +1,8 @@
-
 package views;
+
+import controllers.MatrizController;
+import javax.swing.JOptionPane;
+import tablas.ModeloTablaMatrizMxN;
 
 /**
  *
@@ -7,12 +10,61 @@ package views;
  */
 public class VistaMatriz extends javax.swing.JDialog {
 
+    MatrizController m = new MatrizController();
+    private ModeloTablaMatrizMxN mt = new ModeloTablaMatrizMxN();
+
     /**
      * Creates new form VistaMatriz
      */
     public VistaMatriz(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        CargarTabla();
+        limpiar();
+    }
+
+    private String[][] GenerarMatriz() {      
+            if (txtfilas.getText().isEmpty() || txtcolumns.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar filas y columnas", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        } else {
+            try {
+                int filas = Integer.parseInt(txtfilas.getText());
+                int columnas = Integer.parseInt(txtcolumns.getText());
+
+                if (filas <= 0 || columnas <= 0) {
+                    JOptionPane.showMessageDialog(this, "Las filas y columnas deben ser números mayores que 0", "Error", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+
+                return m.generarMatrizMxN(txtfilas.getText(), txtcolumns.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Ingrese números válidos", "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
+        
+        
+    }
+
+    public void limpiar() {
+        txtfilas.setText("0");
+        txtcolumns.setText("0");
+        String[][] init = m.generarMatrizMxN("3", "3");
+        m.setMatriz(init);
+        mt.setData(init);
+    }
+
+    public void CargarTabla() {
+        String[][] nuevaMatriz = GenerarMatriz();
+        if (nuevaMatriz != null) {
+            m.setMatriz(nuevaMatriz); // Guardar en el controlador
+            mt.setData(nuevaMatriz);  // Actualizar el modelo
+            jTable1.setModel(mt);
+            jTable1.updateUI();
+        } else {
+            JOptionPane.showMessageDialog(null, "no se puede cargar la tabla");
+        }
     }
 
     /**
@@ -24,21 +76,183 @@ public class VistaMatriz extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnGenerar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        btnEliminarNum = new javax.swing.JButton();
+        btnEliminarPrim = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtfilas = new javax.swing.JTextField();
+        txtcolumns = new javax.swing.JTextField();
+        txtnum = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(null);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jPanel1.setLayout(null);
 
-        pack();
+        jLabel1.setFont(new java.awt.Font("Consolas", 0, 24)); // NOI18N
+        jLabel1.setText("Matriz de M x N");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(20, 10, 240, 40);
+
+        jLabel2.setText("Filas");
+        jPanel1.add(jLabel2);
+        jLabel2.setBounds(40, 90, 50, 16);
+
+        jLabel3.setText("Columnas");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(240, 90, 80, 16);
+
+        jLabel4.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        jLabel4.setText("Ingrese el numero que desea eliminar de la Matriz o elimine numeros primos:  ");
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(40, 130, 630, 17);
+
+        btnGenerar.setText("Generar Matriz");
+        btnGenerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGenerar);
+        btnGenerar.setBounds(510, 90, 120, 23);
+
+        jLabel5.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        jLabel5.setText("Ingrese la dimension que requiere:  ");
+        jPanel1.add(jLabel5);
+        jLabel5.setBounds(40, 60, 330, 17);
+
+        btnEliminarNum.setText("Eliminar Número");
+        btnEliminarNum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarNumActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminarNum);
+        btnEliminarNum.setBounds(280, 160, 130, 23);
+
+        btnEliminarPrim.setText("Eliminar Primos");
+        btnEliminarPrim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarPrimActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminarPrim);
+        btnEliminarPrim.setBounds(510, 160, 120, 23);
+
+        jLabel6.setText("Numero a Eliminar:");
+        jPanel1.add(jLabel6);
+        jLabel6.setBounds(40, 160, 160, 16);
+
+        txtfilas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtfilasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtfilas);
+        txtfilas.setBounds(90, 90, 71, 22);
+
+        txtcolumns.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcolumnsActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtcolumns);
+        txtcolumns.setBounds(320, 90, 64, 22);
+
+        txtnum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtnumActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtnum);
+        txtnum.setBounds(180, 160, 71, 22);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null}
+                },
+                new String[]{
+                    "Title 1", "Title 2", "Title 3", "Title 4"
+                }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(50, 220, 590, 260);
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 0, 690, 530);
+
+        setSize(new java.awt.Dimension(707, 538));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
+        try {
+            CargarTabla();
+            if (m.getMatriz() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No se pudo generar la matriz",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ingrese números válidos para filas/columnas",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnGenerarActionPerformed
+
+    private void btnEliminarNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarNumActionPerformed
+        if (txtnum.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número a eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String[][] matrizActual = m.getMatriz();
+        if (matrizActual == null || matrizActual.length == 0) {
+            JOptionPane.showMessageDialog(this, "Genere primero una matriz", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String[][] matrizModificada = m.matrizNum(matrizActual, txtnum.getText());
+        m.setMatriz(matrizModificada);
+        mt.setData(matrizModificada);        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarNumActionPerformed
+
+    private void btnEliminarPrimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPrimActionPerformed
+        String[][] matrizActual = m.getMatriz();
+        if (matrizActual == null || matrizActual.length == 0) {
+            JOptionPane.showMessageDialog(this, "Genere primero una matriz", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String[][] matrizModificada = m.matrizNumPrimo(matrizActual);
+        m.setMatriz(matrizModificada);
+        mt.setData(matrizModificada);
+    }//GEN-LAST:event_btnEliminarPrimActionPerformed
+
+    private void txtfilasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfilasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtfilasActionPerformed
+
+    private void txtcolumnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcolumnsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcolumnsActionPerformed
+
+    private void txtnumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnumActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnumActionPerformed
 
     /**
      * @param args the command line arguments
@@ -83,5 +297,20 @@ public class VistaMatriz extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminarNum;
+    private javax.swing.JButton btnEliminarPrim;
+    private javax.swing.JButton btnGenerar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtcolumns;
+    private javax.swing.JTextField txtfilas;
+    private javax.swing.JTextField txtnum;
     // End of variables declaration//GEN-END:variables
 }

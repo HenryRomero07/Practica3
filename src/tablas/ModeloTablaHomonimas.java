@@ -7,7 +7,7 @@ public class ModeloTablaHomonimas extends AbstractTableModel {
     private final String[] columnNames = {"1ra Casa", "Ancho", "Largo", "Pisos" , "2da Casa", "Ancho", "Largo", "Pisos"};
 
     public ModeloTablaHomonimas() {
-        this.datos = new String[0][7]; // Inicializar con array vacío
+        this.datos = new String[0][7]; 
     }
 
     @Override
