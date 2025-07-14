@@ -8,72 +8,70 @@ import java.util.Random;
 
 
 public class Laberinto {
-    public class Controller_laberinto {
-    private char[][] matriz;
-    private int dimension;
-    private int porcentajeMuros;
+    private Integer[][] laberinto;
+    private final Random rnd = new Random();          
 
-    public Controller_laberinto(int dimension) {
-        this.dimension = dimension;
-        this.porcentajeMuros = new Random().nextInt(21) + 40; 
-        this.matriz = new char[dimension][dimension];
-        generarLaberinto();
-    }
+    /**
+     * Genera un laberinto aleatorio de tamaño filas × columnas.
+     * @param filas    número de filas  (mínimo 2)
+     * @param columnas número de columnas (mínimo 2)
+     */
+    public String[][] generarLaberinto(Integer filas, Integer columnas) {
 
-    private void generarLaberinto() {
-        inicializar();
-        colocarMuros();
-        establecerEntradaSalida();
-    }
+        laberinto = new Integer[filas][columnas];
+        String [][] laberintonuevo = new String[filas][columnas];
 
-    private void inicializar() {
-        for (int i = 0; i < dimension; i++)
-            for (int j = 0; j < dimension; j++)
-                matriz[i][j] = ' ';
-    }
-
-    private void colocarMuros() {
-        Random rand = new Random();
-        int total = dimension * dimension;
-        int muros = total * porcentajeMuros / 100;
-        int colocados = 0;
-
-        while (colocados < muros) {
-            int fila = rand.nextInt(dimension);
-            int col = rand.nextInt(dimension);
-
-            if (matriz[fila][col] == ' ' && !esEntradaOSalida(fila, col)) {
-                matriz[fila][col] = '#';
-                colocados++;
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                laberinto[i][j] = rnd.nextInt(2);
             }
+        }
+        for (int i = 0; i < laberinto.length; i++) {
+            for (int j = 0; j < laberinto[0].length; j++) {
+                if(laberinto [i][j] == 1){
+                    laberintonuevo [i][j] = "#";
+                }else{
+                    laberintonuevo [i][j] = " ";
+                }
+                
+            }
+            
+        }
+   
+
+        laberintonuevo[1][0] = " ";                           
+        laberintonuevo[filas - 2][columnas - 1] = " ";         
+        return laberintonuevo;
+    }
+    
+    
+
+    
+    public void imprimirLaberinto() {
+        if (laberinto == null) {
+            System.out.println("Aún no se ha generado el laberinto.");
+            return;
+        }
+
+        for (Integer[] fila : laberinto) {
+            for (Integer celda : fila) {
+                System.out.print(celda == 1 ? "# " : "  ");  
+            }
+            System.out.println();
         }
     }
 
-    private void establecerEntradaSalida() {
-        matriz[0][0] = 'E';
-        matriz[dimension - 1][dimension - 1] = 'S';
+    /* --- Ejemplo de uso --- */
+    public static void main(String[] args) {
+        Laberinto m = new Laberinto();
+        String[][]laberinto = m.generarLaberinto(25, 25);   
+               for (String[] fila : laberinto) {
+            for (String celda : fila) {
+                System.out.print(celda + " ");  
+            }
+            System.out.println();
+        }
     }
-
-    private boolean esEntradaOSalida(int f, int c) {
-        return (f == 0 && c == 0) || (f == dimension - 1 && c == dimension - 1);
-    }
-
-    public void regenerar() {
-        generarLaberinto();
-    }
-
-    public char[][] getMatriz() {
-        return matriz;
-    }
-
-    public int getDimension() {
-        return dimension;
-    }
-
-    public int getPorcentajeMuros() {
-        return porcentajeMuros;
-    }
-}
 }
 
     
