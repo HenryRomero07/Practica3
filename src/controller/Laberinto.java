@@ -12,17 +12,15 @@ public class Laberinto {
     private final Random rnd = new Random();          
 
     /**
-     * Genera un laberinto aleatorio de tamaño filas × columnas.
-     * @param filas    número de filas  (mínimo 2)
-     * @param columnas número de columnas (mínimo 2)
+     * Genera un laberinto aleatorio de tamaño dimension × dimension.
+     * @param dimension    número de dimension  
      */
-    public String[][] generarLaberinto(Integer filas, Integer columnas) {
+    public String[][] generarLaberinto(int dimension) {
+        laberinto = new Integer[dimension][dimension];
+        String [][] laberintonuevo = new String[dimension][dimension];
 
-        laberinto = new Integer[filas][columnas];
-        String [][] laberintonuevo = new String[filas][columnas];
-
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 laberinto[i][j] = rnd.nextInt(2);
             }
         }
@@ -40,7 +38,7 @@ public class Laberinto {
    
 
         laberintonuevo[1][0] = " ";                           
-        laberintonuevo[filas - 2][columnas - 1] = " ";         
+        laberintonuevo[dimension - 2][dimension - 1] = " ";         
         return laberintonuevo;
     }
     
@@ -64,7 +62,7 @@ public class Laberinto {
     /* --- Ejemplo de uso --- */
     public static void main(String[] args) {
         Laberinto m = new Laberinto();
-        String[][]laberinto = m.generarLaberinto(25, 25);   
+        String[][]laberinto = m.generarLaberinto(15);   
                for (String[] fila : laberinto) {
             for (String celda : fila) {
                 System.out.print(celda + " ");  
