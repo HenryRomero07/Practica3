@@ -16,7 +16,7 @@ public class VistaLaberinto extends javax.swing.JDialog {
 
     private Tablaslaberinto mt = new Tablaslaberinto();
     private Laberinto l = new Laberinto();
-
+    
     /**
      * Creates new form Laberinto
      */
@@ -30,18 +30,13 @@ public class VistaLaberinto extends javax.swing.JDialog {
     
     
     private void crearLaberinto() {
-        if (txtDimension.getText().isEmpty()) {
+        if (SpinnerDimension.getValue().toString().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos");
         } else {
-            int dimension = Integer.parseInt(txtDimension.getText());
-            int porcen = Integer.parseInt(txtporcentaje.getText());
+            int dimension = Integer.parseInt(SpinnerDimension.getValue().toString());
+            int porcen = Integer.parseInt(SpinnerParede.getValue().toString());
             if (!(dimension < 10 || dimension > 100)) {
-                String[][] nuevaMatriz = l.generarLaberinto(dimension, porcen);
-
-                Tablaslaberinto nuevoModelo = new Tablaslaberinto(); 
-                nuevoModelo.setLaberinto(nuevaMatriz);
-                
-                jTablelabrinto.setModel(nuevoModelo);
+                actualizarTabla(dimension, porcen);
             } else {
                 JOptionPane.showMessageDialog(null, "Solo se permiten dimensiones desde 10 hasta 100 ");
             }
@@ -50,30 +45,36 @@ public class VistaLaberinto extends javax.swing.JDialog {
     }
     
     private void porcentaje(){
-        if (txtDimension.getText().isEmpty() || txtporcentaje.getText().isEmpty()) {
+        if (SpinnerDimension.getValue().toString().isEmpty() || SpinnerParede.getValue().toString().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos para generar por porcentaje");
         } else {
-            int dimension = Integer.parseInt(txtDimension.getText());
-            int porcen = Integer.parseInt(txtporcentaje.getText());
-            if (!(porcen < 40 || porcen > 60)) {
-                String[][] nuevaMatriz = l.generarLaberinto(dimension, porcen);
-
-                Tablaslaberinto nuevoModelo = new Tablaslaberinto(); 
-                nuevoModelo.setLaberinto(nuevaMatriz);
-                
-                jTablelabrinto.setModel(nuevoModelo);
-                JOptionPane.showMessageDialog(null, "matriz generada "  + porcen );
+            int dimension = Integer.parseInt(SpinnerDimension.getValue().toString());
+            int porcen = Integer.parseInt(SpinnerParede.getValue().toString());
+            if (porcen >= 40 && porcen <= 60) {
+                actualizarTabla(dimension, porcen);
             } else {
                 JOptionPane.showMessageDialog(null, "Solo se permite un porcentaje del 40% al 60%");
             }
 
         }
     }
+    
+    private void actualizarTabla(int dimension, int porcentaje) {
+    String[][] nuevaMatriz = l.generarLaberinto(dimension, porcentaje);
+    l.verificarPorcentaje(nuevaMatriz, porcentaje);
+    Tablaslaberinto nuevoModelo = new Tablaslaberinto(); 
+    nuevoModelo.setLaberinto(nuevaMatriz);
+    jTablelabrinto.setModel(nuevoModelo);
+    jTablelabrinto.updateUI();
+}
+
 
     public void CargarTabla() {
-        txtDimension.setText("10");
-        txtporcentaje.setText("50");
-        mt.setLaberinto(l.generarLaberinto(Integer.parseInt(txtDimension.getText()),Integer.parseInt(txtporcentaje.getText())));
+        SpinnerDimension.setValue(10);
+        SpinnerParede.setValue(50);
+        int dimension = Integer.parseInt(SpinnerDimension.getValue().toString());
+        int porcen = Integer.parseInt(SpinnerParede.getValue().toString());
+        mt.setLaberinto(l.generarLaberinto(dimension,porcen));
         jTablelabrinto.setModel(mt);
         jTablelabrinto.updateUI();
         
@@ -96,8 +97,8 @@ public class VistaLaberinto extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtporcentaje = new javax.swing.JTextField();
-        txtDimension = new javax.swing.JTextField();
+        SpinnerDimension = new javax.swing.JSpinner();
+        SpinnerParede = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -171,16 +172,10 @@ public class VistaLaberinto extends javax.swing.JDialog {
         jLabel3.setText("Porcentaje de paredes:");
         jPanel2.add(jLabel3);
         jLabel3.setBounds(80, 110, 150, 16);
-
-        txtporcentaje.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtporcentajeActionPerformed(evt);
-            }
-        });
-        jPanel2.add(txtporcentaje);
-        txtporcentaje.setBounds(220, 110, 64, 22);
-        jPanel2.add(txtDimension);
-        txtDimension.setBounds(220, 60, 64, 22);
+        jPanel2.add(SpinnerDimension);
+        SpinnerDimension.setBounds(220, 60, 64, 22);
+        jPanel2.add(SpinnerParede);
+        SpinnerParede.setBounds(220, 110, 64, 22);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(6, 0, 790, 562);
@@ -197,10 +192,6 @@ public class VistaLaberinto extends javax.swing.JDialog {
     private void BtnPorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPorcentajeActionPerformed
     porcentaje();        // TODO add your handling code here:
     }//GEN-LAST:event_BtnPorcentajeActionPerformed
-
-    private void txtporcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtporcentajeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtporcentajeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,6 +238,8 @@ public class VistaLaberinto extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnPorcentaje;
+    private javax.swing.JSpinner SpinnerDimension;
+    private javax.swing.JSpinner SpinnerParede;
     private javax.swing.JButton jButtoncrear;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -254,7 +247,5 @@ public class VistaLaberinto extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablelabrinto;
-    private javax.swing.JTextField txtDimension;
-    private javax.swing.JTextField txtporcentaje;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,88 +1,70 @@
-
 package controller;
 
 import java.util.Random;
-import javax.swing.JOptionPane;
-import views.Tablas.Tablaslaberinto;
-
 
 public class Laberinto {
-    
-    private Integer[][] laberinto;
-    
-    private final Random rnd = new Random();          
+
+    private final Random rnd = new Random();
 
     /**
      * Genera un laberinto aleatorio de tamaño dimension × dimension.
-     * @param dimension    número de dimension  
+     *
+     * @param dimension número de dimension
      */
-    public String[][] generarLaberinto(int dimension, int porcen) {
-        laberinto = new Integer[dimension][dimension];
-        String [][] laberintonuevo = new String[dimension][dimension];
-        int cont = 0;
+    public String[][] generarLaberinto(int dimension, float porcen) {
+        String[][] laberinto = new String[dimension][dimension];
+        
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                laberinto[i][j] = rnd.nextInt(2);
-                //contador de unos y ceros
-                if (laberinto[i][j] == 1) {
-                    cont++;
-                }else 
-                    continue;
-                
+                laberinto[i][j] = " ";
             }
         }
+
+        int nroParedes = (int) ((dimension * dimension) * (porcen / 100.0f));
+
+        int contador = 0;
+        while (contador < nroParedes) {
+            int fila = rnd.nextInt(dimension);
+            int columna = rnd.nextInt(dimension);
+
+            
+            if ((fila == 1 && columna == 0) || (fila == dimension - 2 && columna == dimension - 1)) {
+                continue;
+            }
+
+            if (laberinto[fila][columna].equals(" ")) {
+                laberinto[fila][columna] = "#";
+                contador++;
+            }
+        }
+
+        
+        laberinto[1][0] = "E";
+        laberinto[1][1] = " ";
+        laberinto[dimension - 2][dimension - 1] = "S";
+        laberinto[dimension - 2][dimension - 2] = " ";
+        
+
+        return laberinto;
+    }
+
+    public void verificarPorcentaje(String[][] laberinto, float porcenEsperado) {
+        int paredes = 0;
+        int total = laberinto.length * laberinto[0].length;
+
         for (int i = 0; i < laberinto.length; i++) {
             for (int j = 0; j < laberinto[0].length; j++) {
-                if(laberinto [i][j] == 1){
-                    laberintonuevo [i][j] = "#";
-                    
-                }else {
-                    laberintonuevo [i][j] = " ";
-                }
-                
-            }
-            
-        }
-   
-
-        laberintonuevo[1][0] = "E";                           
-        laberintonuevo[dimension - 2][dimension - 1] = "S"; 
-
-        if(verificacionPorcentaje(laberintonuevo, porcen)){
-        return laberintonuevo;
-        }else 
-        return null;
-    }
-    
-    public Boolean verificacionPorcentaje(String[][] matriz, int porcen){
-        Boolean estado = false; 
-        int cont = 0;
-        
-        for (String[] strings : matriz) {
-            for (String string : strings) {
-                if ("1".equals(string)) {
-                    cont++;
+                if (laberinto[i][j].equals("#")) {
+                    paredes++;
                 }
             }
         }
-        
-        int porcentaje ;
-        porcen = porcen /100;
-        porcentaje = (matriz.length * matriz.length) * porcen;
-        
-        if(porcentaje == cont){
-            estado = true;
-        }
-            
-        return estado;
-    }
-    
-    
-  
-   
 
-    
-    
+        float porcentajeReal = (paredes * 100.0f) / total;
+
+        System.out.printf("Esperado: %.2f%% - Generado: %.2f%% (%d paredes de %d celdas)\n",
+                porcenEsperado, porcentajeReal, paredes, total);
+    }
 
     /* --- Ejemplo de uso --- */
 //    public static void main(String[] args) {
@@ -101,6 +83,3 @@ public class Laberinto {
 //
 //    }
 }
-
-    
-  
