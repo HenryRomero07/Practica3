@@ -8,47 +8,76 @@ import controller.Laberinto;
 import javax.swing.JOptionPane;
 import views.Tablas.Tablaslaberinto;
 
-
-
-
 /**
  *
  * @author Usuario
  */
 public class VistaLaberinto extends javax.swing.JDialog {
-   
+
     private Tablaslaberinto mt = new Tablaslaberinto();
     private Laberinto l = new Laberinto();
-    
 
     /**
      * Creates new form Laberinto
      */
-    private  VistaLaberinto(java.awt.Frame parent, boolean modal) {
+    private VistaLaberinto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         CargarTabla();
+        
+       
     }
     
-    private void crearLaberinto(){
-        if(txtDimension.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "rogel es gay");
-        } else{
-            mt.setLaberinto(l.generarLaberinto(Integer.parseInt(txtDimension.getText())));
-            jTablelabrinto.setModel(mt);
-            jTablelabrinto.updateUI();
+    
+    private void crearLaberinto() {
+        if (txtDimension.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Faltan Datos");
+        } else {
+            int dimension = Integer.parseInt(txtDimension.getText());
+            int porcen = Integer.parseInt(txtporcentaje.getText());
+            if (!(dimension < 10 || dimension > 100)) {
+                String[][] nuevaMatriz = l.generarLaberinto(dimension, porcen);
+
+                Tablaslaberinto nuevoModelo = new Tablaslaberinto(); 
+                nuevoModelo.setLaberinto(nuevaMatriz);
+                
+                jTablelabrinto.setModel(nuevoModelo);
+            } else {
+                JOptionPane.showMessageDialog(null, "Solo se permiten dimensiones desde 10 hasta 100 ");
+            }
+
         }
     }
     
-    public void CargarTabla(){ 
-        txtDimension.setText("5");
-        mt.setLaberinto(l.generarLaberinto(Integer.parseInt(txtDimension.getText())));
+    private void porcentaje(){
+        if (txtDimension.getText().isEmpty() || txtporcentaje.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Faltan Datos para generar por porcentaje");
+        } else {
+            int dimension = Integer.parseInt(txtDimension.getText());
+            int porcen = Integer.parseInt(txtporcentaje.getText());
+            if (!(porcen < 40 || porcen > 60)) {
+                String[][] nuevaMatriz = l.generarLaberinto(dimension, porcen);
+
+                Tablaslaberinto nuevoModelo = new Tablaslaberinto(); 
+                nuevoModelo.setLaberinto(nuevaMatriz);
+                
+                jTablelabrinto.setModel(nuevoModelo);
+                JOptionPane.showMessageDialog(null, "matriz generada "  + porcen );
+            } else {
+                JOptionPane.showMessageDialog(null, "Solo se permite un porcentaje del 40% al 60%");
+            }
+
+        }
+    }
+
+    public void CargarTabla() {
+        txtDimension.setText("10");
+        txtporcentaje.setText("50");
+        mt.setLaberinto(l.generarLaberinto(Integer.parseInt(txtDimension.getText()),Integer.parseInt(txtporcentaje.getText())));
         jTablelabrinto.setModel(mt);
         jTablelabrinto.updateUI();
+        
     }
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,10 +92,11 @@ public class VistaLaberinto extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablelabrinto = new javax.swing.JTable();
         jButtoncrear = new javax.swing.JButton();
-        jButtonreiniciar = new javax.swing.JButton();
+        BtnPorcentaje = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        txtporcentaje = new javax.swing.JTextField();
         txtDimension = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -95,35 +125,39 @@ public class VistaLaberinto extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTablelabrinto.setAlignmentX(5.0F);
+        jTablelabrinto.setCellSelectionEnabled(true);
         jTablelabrinto.setGridColor(new java.awt.Color(255, 255, 255));
+        jTablelabrinto.setRequestFocusEnabled(false);
         jTablelabrinto.setSelectionBackground(new java.awt.Color(255, 255, 255));
         jTablelabrinto.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jTablelabrinto.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTablelabrinto.setShowGrid(false);
         jTablelabrinto.setSurrendersFocusOnKeystroke(true);
         jTablelabrinto.getTableHeader().setResizingAllowed(false);
         jTablelabrinto.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTablelabrinto);
 
         jPanel2.add(jScrollPane1);
-        jScrollPane1.setBounds(140, 180, 530, 340);
+        jScrollPane1.setBounds(130, 150, 520, 400);
 
-        jButtoncrear.setText("CREAR");
+        jButtoncrear.setText("Generar");
         jButtoncrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtoncrearActionPerformed(evt);
             }
         });
         jPanel2.add(jButtoncrear);
-        jButtoncrear.setBounds(640, 100, 72, 23);
+        jButtoncrear.setBounds(540, 60, 90, 23);
 
-        jButtonreiniciar.setText("REINICIAR");
-        jButtonreiniciar.addActionListener(new java.awt.event.ActionListener() {
+        BtnPorcentaje.setText("Cambiar porcentaje de paredes");
+        BtnPorcentaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonreiniciarActionPerformed(evt);
+                BtnPorcentajeActionPerformed(evt);
             }
         });
-        jPanel2.add(jButtonreiniciar);
-        jButtonreiniciar.setBounds(640, 40, 84, 23);
+        jPanel2.add(BtnPorcentaje);
+        BtnPorcentaje.setBounds(460, 110, 230, 23);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Laberinto");
@@ -138,13 +172,15 @@ public class VistaLaberinto extends javax.swing.JDialog {
         jPanel2.add(jLabel3);
         jLabel3.setBounds(80, 110, 150, 16);
 
-        txtDimension.addActionListener(new java.awt.event.ActionListener() {
+        txtporcentaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDimensionActionPerformed(evt);
+                txtporcentajeActionPerformed(evt);
             }
         });
+        jPanel2.add(txtporcentaje);
+        txtporcentaje.setBounds(220, 110, 64, 22);
         jPanel2.add(txtDimension);
-        txtDimension.setBounds(210, 60, 71, 22);
+        txtDimension.setBounds(220, 60, 64, 22);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(6, 0, 790, 562);
@@ -154,17 +190,17 @@ public class VistaLaberinto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtoncrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtoncrearActionPerformed
-    crearLaberinto();        // TODO add your handling code here:
-        
+        crearLaberinto();        // TODO add your handling code here:
+
     }//GEN-LAST:event_jButtoncrearActionPerformed
 
-    private void jButtonreiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonreiniciarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonreiniciarActionPerformed
+    private void BtnPorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPorcentajeActionPerformed
+    porcentaje();        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnPorcentajeActionPerformed
 
-    private void txtDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDimensionActionPerformed
+    private void txtporcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtporcentajeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDimensionActionPerformed
+    }//GEN-LAST:event_txtporcentajeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,8 +246,8 @@ public class VistaLaberinto extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnPorcentaje;
     private javax.swing.JButton jButtoncrear;
-    private javax.swing.JButton jButtonreiniciar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -219,5 +255,6 @@ public class VistaLaberinto extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablelabrinto;
     private javax.swing.JTextField txtDimension;
+    private javax.swing.JTextField txtporcentaje;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,16 +16,18 @@ public class Tablaslaberinto extends AbstractTableModel{
     
     private String [][] laberintoQ;
     
-   public void Tablaslaberinto(){
+   public Tablaslaberinto(){
        
    }
 
     public String[][] getLaberinto() {
         return laberintoQ;
+        
     }
 
     public void setLaberinto(String[][] laberintoQ) {
         this.laberintoQ = laberintoQ;
+        fireTableDataChanged();
     }
 
     @Override
@@ -36,7 +38,7 @@ public class Tablaslaberinto extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return laberintoQ[0].length;
+        return laberintoQ != null && laberintoQ.length > 0 ? laberintoQ[0].length : 0;
         
     }
 
