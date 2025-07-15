@@ -19,8 +19,8 @@ public class VistaMatriz extends javax.swing.JDialog {
     public VistaMatriz(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        CargarTabla();
         limpiar();
+        CargarTabla();
     }
 
     private String[][] GenerarMatriz() {      
@@ -29,15 +29,23 @@ public class VistaMatriz extends javax.swing.JDialog {
             return null;
         } else {
             try {
-                int filas = Integer.parseInt(txtfilas.getText());
-                int columnas = Integer.parseInt(txtcolumns.getText());
-
-                if (filas <= 0 || columnas <= 0) {
+                String filas = txtfilas.getText();
+                String columnas = txtcolumns.getText();
+                
+                int valortxtfilas = Integer.parseInt(filas);
+                int valortxtcolumns = Integer.parseInt(columnas);
+                
+                if (valortxtfilas <= 0 || valortxtcolumns <= 0) {
                     JOptionPane.showMessageDialog(this, "Las filas y columnas deben ser números mayores que 0", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
-
-                return m.generarMatrizMxN(txtfilas.getText(), txtcolumns.getText());
+                
+                String[][] matriz = m.generarMatrizMxN(filas, columnas);
+                mt.setData(matriz);
+                jTable1.setModel(mt);
+                jTable1.createDefaultColumnsFromModel();
+                jTable1.updateUI();
+                return matriz;
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Ingrese números válidos", "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
@@ -48,8 +56,8 @@ public class VistaMatriz extends javax.swing.JDialog {
     }
 
     public void limpiar() {
-        txtfilas.setText("0");
-        txtcolumns.setText("0");
+        txtfilas.setText("3");
+        txtcolumns.setText("3");
         String[][] init = m.generarMatrizMxN("3", "3");
         m.setMatriz(init);
         mt.setData(init);
@@ -61,6 +69,7 @@ public class VistaMatriz extends javax.swing.JDialog {
             m.setMatriz(nuevaMatriz); // Guardar en el controlador
             mt.setData(nuevaMatriz);  // Actualizar el modelo
             jTable1.setModel(mt);
+            jTable1.createDefaultColumnsFromModel();
             jTable1.updateUI();
         } else {
             JOptionPane.showMessageDialog(null, "no se puede cargar la tabla");

@@ -6,10 +6,6 @@ public class ModeloTablaMatrizMxN extends AbstractTableModel {
 
     private String[][] data;
     
-    public ModeloTablaMatrizMxN() {
-        
-    }
-    
     public void setData(String[][] newData) {
     this.data = newData != null ? newData : new String[0][0];
     fireTableDataChanged();
