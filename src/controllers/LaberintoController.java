@@ -26,6 +26,7 @@ public class LaberintoController {
         }
         
         
+        
         int nroParedes = (int) ((dimension * dimension) * (porcen / 100.0f));
 
         int contador = 0;
@@ -34,10 +35,11 @@ public class LaberintoController {
             int columna = rnd.nextInt(dimension);
 
             if (laberinto[fila][columna].equals(" ")) {
-                laberinto[fila][columna] = "#";
+                laberinto[fila][columna] = "_";
                 contador++;
             }
         }
+        generarCamino(laberinto, dimension);
 
         laberinto[1][0] = "E";
         laberinto[1][1] = " ";
@@ -46,23 +48,49 @@ public class LaberintoController {
 
         return laberinto;
     }
-
-    public void verificarPorcentaje(String[][] laberinto, float porcenEsperado) {
-        int paredes = 0;
-        int total = laberinto.length * laberinto[0].length;
-
-        for (int i = 0; i < laberinto.length; i++) {
-            for (int j = 0; j < laberinto[0].length; j++) {
-                if (laberinto[i][j].equals("#")) {
-                    paredes++;
-                }
+    
+    
+    
+    //metodo para generar un camino 
+private void generarCamino(String[][] laberinto, int dimension) {
+    int filaActual = 1;
+    int columnaActual = 0;
+    int filaFinal = dimension - 2;
+    int columnaFinal = dimension - 1;
+    
+    
+    laberinto[filaActual][columnaActual] = " ";
+    
+    while (filaActual != filaFinal || columnaActual != columnaFinal) {
+        boolean moverFila = rnd.nextBoolean();
+        
+        if (moverFila && filaActual != filaFinal) {
+            
+            
+            if (filaActual < filaFinal) {
+                filaActual++;
+            } else {
+                filaActual--;
+            }
+        } else if (columnaActual != columnaFinal) {
+            
+            
+            if (columnaActual < columnaFinal) {
+                columnaActual++;
+            } else {
+                columnaActual--;
+            }
+        } else {
+            
+            if (filaActual < filaFinal) {
+                filaActual++;
+            } else {
+                filaActual--;
             }
         }
-
-        float porcentajeReal = (paredes * 100.0f) / total;
-
-        System.out.printf("Esperado: %.2f%% - Generado: %.2f%% (%d paredes de %d celdas)\n",
-                porcenEsperado, porcentajeReal, paredes, total);
+        
+        
+        laberinto[filaActual][columnaActual] = " ";
     }
-    
+}    
 }

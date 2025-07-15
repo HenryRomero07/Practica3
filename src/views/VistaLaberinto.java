@@ -1,6 +1,6 @@
-
 package views;
 
+import Renderer.LaberintoCellRenderer;
 import controllers.LaberintoController;
 import javax.swing.JOptionPane;
 import tablas.ModeloTablaLaberinto;
@@ -10,10 +10,10 @@ import tablas.ModeloTablaLaberinto;
  * @author HenryRomero
  */
 public class VistaLaberinto extends javax.swing.JDialog {
-    
+
     private LaberintoController l = new LaberintoController();
     private ModeloTablaLaberinto mt = new ModeloTablaLaberinto();
-    
+
     /**
      * Creates new form VistaLaberinto
      */
@@ -22,17 +22,14 @@ public class VistaLaberinto extends javax.swing.JDialog {
         initComponents();
         CargarTabla();
     }
-    
-    
-    
-    
+
     private void crearLaberinto() {
         if (SpinnerDimension.getValue().toString().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos");
         } else {
             int dimension = Integer.parseInt(SpinnerDimension.getValue().toString());
             int porcen = Integer.parseInt(SpinnerParedes.getValue().toString());
-            if (!(dimension < 10 || dimension > 100)) {
+            if (dimension >= 10 && dimension <= 100) {
                 actualizarTabla(dimension, porcen);
             } else {
                 JOptionPane.showMessageDialog(null, "Solo se permiten dimensiones desde 10 hasta 100 ");
@@ -40,8 +37,8 @@ public class VistaLaberinto extends javax.swing.JDialog {
 
         }
     }
-    
-    private void porcentaje(){
+
+    private void porcentaje() {
         if (SpinnerDimension.getValue().toString().isEmpty() || SpinnerParedes.getValue().toString().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos para generar por porcentaje");
         } else {
@@ -55,29 +52,34 @@ public class VistaLaberinto extends javax.swing.JDialog {
 
         }
     }
-    
-    private void actualizarTabla(int dimension, int porcentaje) {
-    String[][] nuevaMatriz = l.generarLaberinto(dimension, porcentaje);
-    l.verificarPorcentaje(nuevaMatriz, porcentaje);
-    ModeloTablaLaberinto nuevoModelo = new ModeloTablaLaberinto(); 
-    nuevoModelo.setLaberinto(nuevaMatriz);
-    jTableLaberinto.setModel(nuevoModelo);
-    jTableLaberinto.updateUI();
-}
 
+    private void actualizarTabla(int dimension, int porcentaje) {
+        String[][] nuevaMatriz = l.generarLaberinto(dimension, porcentaje);
+        ModeloTablaLaberinto nuevoModelo = new ModeloTablaLaberinto();
+        nuevoModelo.setLaberinto(nuevaMatriz);
+        jTableLaberinto.setModel(nuevoModelo);
+        jTableLaberinto.updateUI();
+
+        LaberintoCellRenderer renderer = new LaberintoCellRenderer();
+        for (int i = 0; i < jTableLaberinto.getColumnCount(); i++) {
+            jTableLaberinto.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
+    }
 
     public void CargarTabla() {
         SpinnerDimension.setValue(10);
         SpinnerParedes.setValue(50);
         int dimension = Integer.parseInt(SpinnerDimension.getValue().toString());
         int porcen = Integer.parseInt(SpinnerParedes.getValue().toString());
-        mt.setLaberinto(l.generarLaberinto(dimension,porcen));
+        mt.setLaberinto(l.generarLaberinto(dimension, porcen));
         jTableLaberinto.setModel(mt);
         jTableLaberinto.updateUI();
-        
+
+        LaberintoCellRenderer renderer = new LaberintoCellRenderer();
+        for (int i = 0; i < jTableLaberinto.getColumnCount(); i++) {
+            jTableLaberinto.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -150,24 +152,27 @@ public class VistaLaberinto extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTableLaberinto.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTableLaberinto.setShowHorizontalLines(true);
+        jTableLaberinto.setShowVerticalLines(true);
         jScrollPane1.setViewportView(jTableLaberinto);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(140, 150, 452, 310);
+        jScrollPane1.setBounds(110, 140, 550, 400);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 740, 530);
+        jPanel1.setBounds(0, 0, 780, 560);
 
-        setSize(new java.awt.Dimension(751, 534));
+        setSize(new java.awt.Dimension(794, 564));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-    crearLaberinto();        // TODO add your handling code here:
+        crearLaberinto();        // TODO add your handling code here:
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void btnParedesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnParedesActionPerformed
-    porcentaje();    // TODO add your handling code here:
+        porcentaje();    // TODO add your handling code here:
     }//GEN-LAST:event_btnParedesActionPerformed
 
     /**

@@ -66,8 +66,8 @@ public class VistaMatriz extends javax.swing.JDialog {
     public void CargarTabla() {
         String[][] nuevaMatriz = GenerarMatriz();
         if (nuevaMatriz != null) {
-            m.setMatriz(nuevaMatriz); // Guardar en el controlador
-            mt.setData(nuevaMatriz);  // Actualizar el modelo
+            m.setMatriz(nuevaMatriz); 
+            mt.setData(nuevaMatriz);  
             jTable1.setModel(mt);
             jTable1.createDefaultColumnsFromModel();
             jTable1.updateUI();
